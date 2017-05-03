@@ -1,0 +1,98 @@
+	
+mana code 
+var hash = window.location.hash;
+	if($(hash).length) scrollToID(hash, PageTimeSpeed); 
+	// scroll to div on nav click
+		$("a").click(function (e) {
+		var id = $(this).attr("href");
+		if($(id ).length) scrollToID(id, PageTimeSpeed);
+	});
+	
+	function scrollToID(id, speed) {
+		var offSet = 110;
+		var obj = $(id).offset();
+		var targetOffset = obj.top - offSet;
+		$("html,body").animate({ scrollTop: targetOffset }, speed);
+	}
+ vadi function 
+$.fn.scrollView = function (opts) {
+	
+	if (!opts) {
+		opts = {};
+	}
+	if (!opts.speed) {
+		opts.speed = 0;
+	}
+	if (!opts.offset) {
+		opts.offset = 0;
+	}
+	return this.each(function () {
+		$("html, body").animate({
+			scrollTop : $(this).offset().top - opts.offset
+		}, opts.speed);
+	});
+}
+
+
+
+Rates code
+
+	function openDesiredRateGroup() {
+		if (!rates.grouploaded) {
+			var values = getRatePageLoadValues();
+			if (values) {
+				var groupId = values[0];
+				var $container = $(".rates-homepage-cntr");
+				var $tabs = $container.find("[role=tab]");
+				var $tab = $tabs.filter("#" + groupId);
+				if ($tab.length) {
+					$tab.trigger("click", $tab); // open group tab
+					var headerOffset = $(".thinTopCntr").height() + $(".mainHeaderCntr").height() + $(".lowerBarCntr").height() + 10; // 10 for padding
+					$container.scrollView({ speed: 150, offset: headerOffset}); //issue with header overlay
+					rates.grouploaded = true;
+				}
+			}
+		}
+	}
+	
+	function openDesiredRateProduct() {
+		if (!rates.productloaded) {
+			var values = getRatePageLoadValues();
+			if (values && values.length > 1) {
+				var productId = values[1];
+				var $elem = $("#" + productId);
+				if ($elem.length) {
+					$elem.find("a.title").click();
+					rates.productloaded = true;
+				}
+			}
+		}
+	}
+	
+	function getRatePageLoadValues() {
+		/* values go in order of specificity: groupid-productid
+			following are valid hashes:
+							: empty/none, nothing will be opened on page load
+				#CON		: will open consumer tab
+				#CON-ATV	: will open consumer tab and then ATV group
+		*/
+		if (window.location.hash) {
+			// replace # which is first character in hash value, then split out values
+			return window.location.hash.substring(1).split("-");
+		}
+		return null;
+	}
+	
+	function configureTabChangeEvent() {
+		/*
+		var $tabs = $(".rates-homepage-cntr").find("[role=tab]");
+		$tabs.off("tabactivate").on("tabactivate", function (e, newTab) {
+			var $tab = $(newTab);
+			var currHash = window.location.hash;
+			if (currHash) {
+				// TODO, both on tab change event and on rate group open (.arrow-toggle-trigger)
+			}
+		});
+		*/
+	}
+})();
