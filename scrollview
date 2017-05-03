@@ -1,0 +1,16 @@
+var hash = window.location.hash;
+	if($(hash).length) scrollView(hash, PageTimeSpeed); 
+    
+    var offSet = 110;
+		var obj = $(id).offset();
+		var targetOffset = obj.top - offSet;
+	// scroll to div on nav click
+		$("a").click(function (e) {
+		var id = $(this).attr("href");
+		if($(id ).length) scrollView({ PageTimeSpeed, offset: targetOffset});
+        
+	});
+	
+	
+    
+    
