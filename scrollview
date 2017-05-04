@@ -1,16 +1,8 @@
 var hash = window.location.hash;
-	if($(hash).length) scrollView(hash, speed: 150); 
-    
-    var offSet = 110;
-		var obj = $(id).offset();
-		var targetOffset = obj.top - offSet;
+	
 	// scroll to div on nav click
-		$("a").click(function (e) {
-		var id = $(this).attr("href");
-		if($(id ).length) scrollView({ speed: 150, offset: targetOffset});
-        
+	$("a").click(function (e) {
+		var id = $(this).attr("href"); 
+        $(window.location.hash).scrollView({offset: HeaderOffset});
+		
 	});
-	
-	
-    
-    
