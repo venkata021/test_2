@@ -1,0 +1,141 @@
+// https://web-design-weekly.com/snippets/scroll-to-position-with-jquery/
+// jquery function used to scroll to desired location on page
+// 		opts.speed = milliseconds value for scrolling animation
+// 		opts.offset = pixel value for top padding when scrolling
+$.fn.scrollView = function (opts) {
+   
+	if (!opts) {
+		opts = {};
+	}
+	if (!opts.speed) {
+		opts.speed = 0;
+	}
+	if (!opts.offset) {
+		opts.offset = 30;
+	}
+	return this.each(function () {
+        console.log('return');
+		$("html, body").animate({
+			scrollTop : $(this).offset().top - opts.offset
+		}, opts.speed);
+	});
+}
+
+var HeaderOffset = $(".thinTopCntr").height() + $(".mainHeaderCntr").height() + $(".lowerBarCntr").height() + 10;
+$(document).ready(function() {
+    
+ 	// scroll to div on nav click
+    function scrollpage() {
+ 		if(window.location.hash){  
+			var offset = $(".thinTopCntr").height() + $(".mainHeaderCntr").height() + $(".lowerBarCntr").height();
+			var targetObj = $(window.location.hash).offset();
+			var targetOffset = targetObj.top - offset;
+			$("html, body").animate({ scrollTop: targetOffset}, 1500);
+        }
+
+    }
+    setTimeout(function(){ scrollpage(); }, 50);
+	
+	
+	configureLogin();
+	configureSearch();
+	configureFormSubmit();
+	configureThirdPartyLinks();
+       
+	
+	function configureLogin() {
+		$(".login-tog").click(function () {
+			$("body").toggleClass("login-active");
+			$("html").addClass("html-active");
+		});
+		
+		$(".login-full-tog").click(function (event) {
+			event.preventDefault();
+			$("#loginSheet").slideDown();
+			$(".login-full-tog").fadeIn();
+			$("#header").scrollView();
+		});
+		
+		$("#osType").val(navigator.platform);
+		$("#osVersion").val(navigator.appVersion);
+		$("#appDetail").val(navigator.userAgent);
+		
+		// used for determining if javascript is enabled for browser
+		var cookieKeyValue = "nbo=" + escape(new Date());
+		document.cookie = cookieKeyValue + ";expires=";
+		$("#cookiesEnabled").val(document.cookie.indexOf(cookieKeyValue) != -1);
+		document.cookie = cookieKeyValue + ";expires=Thu, 01-Jun-2006 23:59:59 GMT";
+		
+		$("#username").focus();
+	}
+
+	function configureSearch() {
+		var button = $(".search-tog")[0];
+		var elem = $("#searchSheet")[0];
+		$(".search-tog-open").click(function (e) {
+			$("body").toggleClass("search-active");
+			e.preventDefault();
+			$(".searchSheet").show();
+			$("#searchSheet input[type='text']").focus();
+			e.stopPropagation();
+		});
+		
+		$(".searchSheet__toggle").click(function (e) {
+			$("body").toggleClass("search-active");
+			e.preventDefault();
+			$(".searchSheet").hide();
+			
+			e.stopPropagation();
+		});
+		
+		$(document).on("click", function (e) {
+			if ($(e.target).closest(".searchSheet").length === 0) {
+				$(".searchSheet").hide();
+			}
+		});
+		$(document).on("keydown", function (e) {
+			if (e.keyCode === 27) {
+				// escape key
+				$(".searchSheet").hide();
+			}
+		});
+	}
+
+
+	
+	function configureThirdPartyLinks() {
+		$("a[href*='myonlineinsurance.com'], a[href*='carvana.com'], a[href*='randolphbrooksfed.vlending.com'], a[href*='linkedin.com'], a[href*='rbfcu.mortgagewebcenter.com'], a[href*='petinsurance.com'],a[href*='rbfcu.cudlautosmart.com'],a[href*='randolphbrooksinsurance.consumerratequotes.com'],a[href*='rbrealty.com'],a[href*='salliemae.com'],a[href*='insuremyltc.com'],a[href*='deals.totalprotect.com'],a[href*='travelinsured.com'],a[href*='turbotax.intuit.com'],a[href*='itunes.apple.com'],a[href*='play.google.com'], a[href*='rbfcu.wd5.myworkdayjobs.com']").addClass("no-external");
+		$("a").filter(function () {
+			var ignoreLink =
+				this.hostname == location.hostname || this.href.match(/^(mailto|tel|javascript)\:/);
+			return !ignoreLink;
+		}).addClass("externalanchor").attr("target", "_blank");
+	}
+	
+	function configureFormSubmit() {
+		$("form").submit(function (e) {
+			$("input:visible").blur();
+			$(this).find("input[type='submit']").replaceWith("<div id='spinloader' style='position:relative;'/> <span>Loading</span></div>");
+			var target = document.getElementById("spinloader");
+			var opts = {
+				lines: 7,
+				length: 0,
+				width: 5,
+				radius: 5,
+				corners: 1,
+				rotate: 0,
+				direction: 1,
+				color: "#000",
+				speed: 1,
+				trail: 60,
+				shadow: false,
+				hwaccel: false,
+				className: "spinner",
+				top: "6px",
+				left: "50%"
+			};
+			new Spinner(opts).spin(target);
+		});
+	}
+	
+});
